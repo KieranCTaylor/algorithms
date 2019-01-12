@@ -17,7 +17,7 @@ def main():
 
     node_count, weights = open_problem_file(problem_path)
 
-    nodes = [Node(index=c, weight=w) for c, w in enumerate(weights, 1)] # change this to generator?
+    nodes = [Node(index=c, weight=w) for c, w in enumerate(weights, 1)]
 
     max_weights = generate_max_weights(nodes)
     max_weight = max_weights[-1]
