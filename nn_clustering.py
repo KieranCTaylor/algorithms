@@ -9,6 +9,11 @@ k = 4
 
 
 def main():
+    """
+    Input file contains edges in a graph (start node, end node, edge weight).
+    By contracting the nearest neighbors in the graph, produce the minimum distance between
+    any clusters for a graph consisting of k clusters
+    """
 
     header, data = open_problem_file(problem_path)
 
