@@ -31,15 +31,6 @@ def main():
     print(f'Binary string -> {binary_string}')
 
 
-def open_problem_file(file_path):
-
-    with open(file_path) as file:
-        header = int(file.readline())
-        data = [int(x) for x in file.readlines()]
-
-    return header, data
-
-
 def generate_max_weights(nodes):
 
     max_weights = [0, nodes[0].weight]
@@ -78,6 +69,15 @@ def generate_binary_string(max_set, vertices):
             binary_string = binary_string + '0'
 
     return binary_string
+
+
+def open_problem_file(file_path):
+
+    with open(file_path) as file:
+        header = int(file.readline())
+        data = [int(x) for x in file.readlines()]
+
+    return header, data
 
 
 if __name__ == '__main__':
