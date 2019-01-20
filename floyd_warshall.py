@@ -14,10 +14,10 @@ def main():
     for path in problem_paths:
 
         edges = open_problem_file(path)
-        shortest_paths, negative_cycles = floyd_warshall(edges)
+        min_paths, negative_cycles = floyd_warshall(edges)
 
         if not negative_cycles:
-            print(min([min(x) for x in shortest_paths]))
+            print(min([min(min_paths[x]) for x in min_paths]))
 
 
 def floyd_warshall(edges):
@@ -58,6 +58,7 @@ def detect_negative_cycles(min_paths):
         if min_paths[node][node] < 0:
             print('Negative cycle detected!')
             negative_cycles = True
+            return min_paths, negative_cycles
 
         else:
             min_paths[node][node] = INF
