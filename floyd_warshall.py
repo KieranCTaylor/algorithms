@@ -22,7 +22,7 @@ def main():
         min_paths, negative_cycles = floyd_warshall(edges)
 
         if not negative_cycles:
-            shortest_path = min([min(min_paths[x]) for x in min_paths])
+            shortest_path = min([min(min_paths[x].values()) for x in min_paths])
             print(f'Shortest path is {shortest_path}')
 
         else:
@@ -45,13 +45,13 @@ def floyd_warshall(edges):
         for source in nodes:
             for dest in nodes:
 
-                current_weight = min_paths[source][dest]
-                min_weight = min(
-                    current_weight,
+                current_distance = min_paths[source][dest]
+                min_distance = min(
+                    current_distance,
                     min_paths[source][intermediate] + min_paths[intermediate][dest]
                 )
 
-                min_paths[source][dest] = min_weight
+                min_paths[source][dest] = min_distance
 
     result, negative_cycles_exist = detect_negative_cycles(min_paths)
 

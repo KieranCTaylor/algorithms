@@ -1,6 +1,6 @@
 """
 The Bellman-Ford algorithm is a single source shortest path evaluator, like Dijkstra.
-Although it runs in a slower time of O(mn) compared to Dijkstra O(n), it is able to detect negative
+Although it runs in a slower time of O(mn) compared to Dijkstra O(m log n), it is able to detect negative
 edge cycles and can run in a distributed fashion, making it useful for internet routing.
 """
 from collections import namedtuple
@@ -18,27 +18,40 @@ def main():
     """
     Given the edges in the problem files, find first if a negative edge cycle exists,
     if not, return the shortest of all paths from any s -> v
-    (also achieved using Floyd-Warshall)
+    (also achieved using Floyd-Warshall, could be sped up by using Dijkstra once no negative cycles been confirmed)
     """
 
     for path in problem_paths:
 
         edges = open_problem_file(path)
-        source = edges[0].start_node
-        dest = edges[-1].end_node
-        min_paths, negative_cycles = bellman_ford(edges, source)
+        nodes = find_all_nodes(edges)
+
+        source_nodes = nodes.copy()
+        source = source_nodes.pop()
+
+        min_paths, negative_cycles = bellman_ford(edges, nodes, source)
 
         if not negative_cycles:
-            print(f'No negative cycles for problem {path}')
-            print(f'Example shortest path length: {source} -> {dest} is {min_paths[dest]}')
+            print(f'No negative cycles for problem {path}, now calculating all path distances...')
+            shortest_path = min(min_paths.values())
+
+            for i in range(len(source_nodes)):
+
+                source = source_nodes.pop()
+
+                min_paths, negative_cycles = bellman_ford(edges, nodes, source)
+                shortest_path = min(
+                    min(min_paths.values()),
+                    shortest_path
+                )
+
+            print(f'Shortest path is {shortest_path}')
 
         else:
             print(f'Negative edge detected for {path}')
 
 
-def bellman_ford(edges, source):
-
-    nodes = find_all_nodes(edges)
+def bellman_ford(edges, nodes, source):
 
     shortest_path_to = {node: INF for node in nodes}
 
