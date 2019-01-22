@@ -10,6 +10,11 @@ INF = sys.maxsize
 
 
 def main():
+    """
+    Given the edges in the problem files, find first if a negative edge cycle exists,
+    if not, return the shortest of all paths from any s -> v
+    (also achieved using Bellman_Ford)
+    """
 
     for path in problem_paths:
 
@@ -17,7 +22,11 @@ def main():
         min_paths, negative_cycles = floyd_warshall(edges)
 
         if not negative_cycles:
-            print(min([min(min_paths[x]) for x in min_paths]))
+            shortest_path = min([min(min_paths[x]) for x in min_paths])
+            print(f'Shortest path is {shortest_path}')
+
+        else:
+            print(f'Negative edge detected for {path}')
 
 
 def floyd_warshall(edges):
@@ -56,7 +65,6 @@ def detect_negative_cycles(min_paths):
     for node in min_paths:
 
         if min_paths[node][node] < 0:
-            print('Negative cycle detected!')
             negative_cycles = True
             return min_paths, negative_cycles
 
