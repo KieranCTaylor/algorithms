@@ -23,7 +23,7 @@ def main():
 
         filled_knapsack = knapsack(knapsack_size, items)
 
-        print(f'Optimum solution for {path} is:\n{max(filled_knapsack)}\n')
+        print(f'Optimum solution for {path} is:\n{max(filled_knapsack[-1])}\n')
 
 
 def open_problem_file(file_path):
@@ -36,31 +36,28 @@ def open_problem_file(file_path):
     return header, data
 
 
-def knapsack(knapsack_size, items):
+def knapsack(knapsack_capacity, items):
 
-    dynamic_solutions = [0 for x in range(knapsack_size + 1)]
+    knapsacks = [[0 for _ in range(knapsack_capacity + 1)] for i in range(len(items) + 1)]
 
-    for item_pointer in range(len(items) + 1):
+    for i in range(len(items) + 1):
+        item = items[i - 1]
 
-        for current_capacity in range(knapsack_size+1):
+        for capacity in range(1, knapsack_capacity + 1):
 
-            if item_pointer == 0 or current_capacity == 0:
+            if i == 0 or capacity == 0:
                 pass
 
+            elif item.weight <= capacity:
+                knapsacks[i][capacity] = max(
+                        item.value + knapsacks[i - 1][capacity - item.weight],
+                        knapsacks[i - 1][capacity]
+                        )
+
             else:
-                current_item = items[item_pointer - 1]
+                knapsacks[i][capacity] = knapsacks[i - 1][capacity]
 
-                if current_item.weight <= current_capacity:
-
-                    max_value_with_remaining_capacity = dynamic_solutions[current_capacity - current_item.weight]
-                    max_value_with_current_item = current_item.value + max_value_with_remaining_capacity
-
-                    max_value_without_current_item = dynamic_solutions[current_capacity]
-
-                    dynamic_solutions[current_capacity] = max(max_value_with_current_item,
-                                                              max_value_without_current_item)
-
-    return dynamic_solutions
+    return knapsacks
 
 
 if __name__ == '__main__':
